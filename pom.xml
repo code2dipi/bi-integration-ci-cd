@@ -68,6 +68,8 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+
+		<finalName>bi-integration-image-v1</finalName>
 	</build>
 
 </project>
