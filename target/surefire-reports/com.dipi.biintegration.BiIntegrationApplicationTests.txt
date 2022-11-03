@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.dipi.biintegration.BiIntegrationApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.292 s - in com.dipi.biintegration.BiIntegrationApplicationTests

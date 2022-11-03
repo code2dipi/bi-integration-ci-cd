@@ -1,0 +1,10 @@
+com\dipi\biintegration\model\Roles.class
+com\dipi\biintegration\model\UserDetail.class
+com\dipi\biintegration\controller\BusinessController.class
+com\dipi\biintegration\controller\RolesController.class
+com\dipi\biintegration\model\Token.class
+com\dipi\biintegration\repository\UserRepository.class
+com\dipi\biintegration\service\ConnectService.class
+com\dipi\biintegration\Exception\ResourceNotFoundException.class
+com\dipi\biintegration\repository\RolesRepository.class
+com\dipi\biintegration\BiIntegrationApplication.class
