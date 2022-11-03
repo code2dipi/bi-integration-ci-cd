@@ -1,78 +1,128 @@
 package com.dipi.biintegration.service;
 
-import com.dipi.biintegration.Exception.ResourceNotFoundException;
-import com.dipi.biintegration.model.User;
+import com.dipi.biintegration.model.UserDetail;
+import com.dipi.biintegration.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class ConnectService {
-    private static final Logger LOG= LoggerFactory.getLogger(ConnectService.class);
-    List<User> userList=new ArrayList<>();
+    private static final Logger LOG = LoggerFactory.getLogger(ConnectService.class);
+    private final List<UserDetail> userDetailList = new ArrayList<>();
 
-    public List<User> getUsers(){
-        User user1=new User();
-        user1.setId(1);
-        user1.setName("Tester");
-        user1.setEmail("testter@gmail.com");
-        user1.setPhone("45656566");
+    private final UserRepository userRepository;
 
-        User user2=new User();
-        user2.setId(2);
-        user2.setName("Automation");
-        user2.setEmail("automat@gmail.com");
-        user2.setPhone("896532");
-
-        User user3=new User();
-        user3.setId(3);
-        user3.setName("Test");
-        user3.setEmail("test@gmail.com");
-        user3.setPhone("546546");
-
-        userList.add(user1);
-        userList.add(user2);
-        userList.add(user3);
-        return userList;
+    @Autowired
+    public ConnectService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
-    public User getUserById(int id){
-        List<User> mylist=getUsers();
-        for(User user:mylist){
-           if(user.getId()==id){
-              return user;
-           }
+
+    public UserDetail getUserById(int id) {
+        List<UserDetail> mylist = List.of(new UserDetail("null", null, null));
+
+        for (UserDetail userDetail : mylist) {
+            if (userDetail.getId() == id) {
+                return userDetail;
+            }
         }
         throw new IllegalArgumentException("Null pointer exception or null values");
     }
 
     /**
      * Wild card hit
+     *
      * @param name
      * @return
      */
-    public List<User> getUsersByWildCardName(String name){
-        List<User> mylist=getUsers();
-        List<User> hitListUser=new ArrayList<>();
-        for(User user:mylist){
-            if(user.getName().contains(name)){
-                hitListUser.add(user);
+    public List<UserDetail> getUsersByWildCardName(String name) {
+        List<UserDetail> mylist = null;
+        List<UserDetail> hitListUserDetail = new ArrayList<>();
+        for (UserDetail userDetail : mylist) {
+            if (userDetail.getName().contains(name)) {
+                hitListUserDetail.add(userDetail);
             }
 
         }
-        return hitListUser;
+        return hitListUserDetail;
     }
-    public Map<String,Boolean> deleteUserById(int id) {
-        List<User> mylist=getUsers();
 
-        for(User user:mylist){
-            if(user.getId()==id){
-                mylist.remove(user);
+    public Map<String, Boolean> deleteUserById(int id) {
+        List<UserDetail> mylist = null;//getUsers();
+
+        for (UserDetail userDetail : mylist) {
+            if (userDetail.getId() == id) {
+                mylist.remove(userDetail);
             }
         }
         Map<String, Boolean> response = new HashMap<>();
-        response.put("successfully deleted",Boolean.TRUE);
+        response.put("successfully deleted", Boolean.TRUE);
         return response;
     }
+
+    /**
+     * Create UserDetail
+     * @param userDetail
+     */
+    public void createUser(UserDetail userDetail) {
+        if (userDetail.getName().trim().isEmpty() || userDetail.getName().trim() == null) {
+            LOG.info("Can not save to database ..object is null");
+            return;
+        } else {
+            UserDetail ud = new UserDetail();
+            ud.setName(userDetail.getName());
+            ud.setEmail(userDetail.getEmail());
+            ud.setPhone(userDetail.getPhone());
+            userRepository.save(userDetail);
+            LOG.info("Successfully saved to Database");
+        }
+
+    }
+
+    /**
+     * List all UserDetail
+     * @return
+     */
+    public List<UserDetail> getAllUser() {
+        List<UserDetail> userDetails = new ArrayList<>();
+        userDetails = userRepository.findAll();
+        if (userDetails != null) {
+            return userDetails;
+        }
+        return null;
+    }
+
+    /**
+     * Delete UserDetail
+     * @param id
+     */
+    public void deleteUser(int id ){
+       UserDetail userFromDB=userRepository.findById(id);
+        if(userFromDB!=null){
+            userRepository.delete(userFromDB);
+            LOG.info("User{} Deleted successfully: ");
+        }else{
+            throw new IllegalArgumentException("User can not delete..");
+        }
+    }
+
+    /**
+     * Edit UserDetail
+     * @param userDetail
+     * @param id
+     */
+    public void editUser(UserDetail userDetail,int id){
+        UserDetail userFromDB=userRepository.findById(id);
+        if(userFromDB!=null){
+            UserDetail u=new UserDetail();
+            u.setName(userDetail.getName());
+            u.setEmail(userDetail.getEmail());
+            u.setPhone(userDetail.getPhone());
+        }
+    }
+
+
 }
